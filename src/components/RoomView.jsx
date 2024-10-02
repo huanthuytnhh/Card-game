@@ -157,40 +157,54 @@ const generateCards = () => {
 
   return allCards.sort(() => Math.random() - 0.5).slice(0, 13); // Randomly select 13 cards
 };
+
 // const RoomView = () => {
 //   const { roomName } = useParams();
 //   const [gameStarted, setGameStarted] = useState(false);
+//   const [showLoader, setShowLoader] = useState(false);
+//   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 //   const [players, setPlayers] = useState([
-//     { id: 1, hand: generateCards(), movedCards: [] }, // Player 1 (North)
-//     { id: 2, hand: generateCards(), movedCards: [] }, // Player 2 (East)
-//     { id: 3, hand: generateCards(), movedCards: [] }, // Player 3 (South)
-//     { id: 4, hand: generateCards(), movedCards: [] }, // Player 4 (West)
+//     {
+//       id: 1,
+//       hand: generateCards(),
+//       movedCards: [],
+//       avatar: Thanh,
+//     }, // Update with actual avatar paths
+//     {
+//       id: 2,
+//       hand: generateCards(),
+//       movedCards: [],
+//       avatar: Quan,
+//     },
+//     {
+//       id: 3,
+//       hand: generateCards(),
+//       movedCards: [],
+//       avatar: Quang,
+//     },
+//     {
+//       id: 4,
+//       hand: generateCards(),
+//       movedCards: [],
+//       avatar: Duy,
+//     },
 //   ]);
 //   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
-//   const [countdown, setCountdown] = useState(15); // Thay đổi thời gian đếm ngược tại đây
-
-//   useEffect(() => {
-//     let timer;
-//     if (gameStarted && countdown > 0) {
-//       timer = setInterval(() => {
-//         setCountdown((prev) => prev - 1);
-//       }, 1000);
-//     } else if (countdown === 0) {
-//       handleNextTurn();
-//     }
-
-//     return () => clearInterval(timer);
-//   }, [gameStarted, countdown]);
+//   const [countdown, setCountdown] = useState(15);
 
 //   const handleStartGame = () => {
 //     if (players.length < 4) {
 //       alert("Not enough players. Need at least 4 players to start the game.");
 //       return;
 //     }
-//     setGameStarted(true);
-//     setCountdown(15); // Đặt lại đếm ngược khi bắt đầu trò chơi
+//     // Show loader for 5 seconds
+//     setShowLoader(true);
+//     setTimeout(() => {
+//       setShowLoader(false);
+//       setGameStarted(true);
+//       setCountdown(15); // Đặt lại đếm ngược khi bắt đầu trò chơi
+//     }, 5000); // Hide loader and start game after 5 seconds
 //   };
-
 //   const handleNextTurn = () => {
 //     const totalMovedCards = players.flatMap(
 //       (player) => player.movedCards
@@ -199,14 +213,13 @@ const generateCards = () => {
 //     // Nếu số lượng lá bài đã di chuyển vượt quá 13, reset về trạng thái rỗng
 //     const newPlayers = players.map((player) => ({
 //       ...player,
-//       movedCards: totalMovedCards > 8 ? [] : player.movedCards, // Reset nếu vượt quá 13 lá
+//       movedCards: totalMovedCards > 7 ? [] : player.movedCards, // Reset nếu vượt quá 13 lá
 //     }));
 
 //     setPlayers(newPlayers); // Cập nhật trạng thái người chơi
 //     setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % players.length);
 //     setCountdown(15); // Đặt lại đếm ngược cho lượt mới
 //   };
-
 //   const handleMoveCards = (cards) => {
 //     const newPlayers = [...players];
 //     const currentPlayer = newPlayers[currentPlayerIndex];
@@ -220,14 +233,42 @@ const generateCards = () => {
 
 //     handleNextTurn();
 //   };
+//   const toggleHeader = () => {
+//     setIsHeaderVisible((prev) => !prev); // Đảo ngược trạng thái hiển thị của header
+//   };
 
 //   return (
 //     <div className="flex flex-col items-center h-screen bg-gray-100">
-//       <Header />
-//       {gameStarted ? (
+//       {/* <button
+//         className="fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg z-10"
+//         onClick={toggleHeader}
+//       >
+//         {isHeaderVisible ? "Hide Header" : "Show Header"}
+//       </button> */}
+//       <div
+//         className={`fixed rounded-lg z-10 focus:outline-none ${
+//           isHeaderVisible ? "top-7 right-32" : "top-4 right-4"
+//         } `}
+//       >
+//         <div className="flex gap-2">
+//           <img src={menuIcon} alt="" className="w-7 h-7" />
+//           <Switch
+//             className="h-7"
+//             //   className={`fixed rounded-lg z-10 focus:outline-none ${
+//             //     isHeaderVisible ? "top-7 right-32" : "top-4 right-4"
+//             //   } `}
+//             onClick={toggleHeader}
+//           />
+//         </div>
+//       </div>
+
+//       {isHeaderVisible && <Header />}
+//       {showLoader ? (
+//         <ShuffleCardLoader /> // Show loader when showLoader is true
+//       ) : gameStarted ? (
 //         <>
 //           {/* Thanh trạng thái hiển thị lượt và đếm ngược */}
-//           <div className="flex items-center justify-between w-3/5 p-4 h-12 shadow-xl bg-slate-200 text-black rounded-lg">
+//           <div className="flex items-center justify-between w-3/5 p-4 h-12 shadow-xl bg-gray-200 text-black rounded-lg mt-[5px] border-white border-2">
 //             <h2 className="text-xl font-semibold">
 //               Current Turn: Player {currentPlayerIndex + 1}
 //             </h2>
@@ -267,7 +308,7 @@ const generateCards = () => {
 //           />
 //         </>
 //       ) : (
-//         <>
+//         <div className="mb-5">
 //           <h1 className="text-4xl font-bold mb-0">Welcome to {roomName}!</h1>
 //           <p className="text-lg mb-8">
 //             The game will start soon. Waiting for players to join...
@@ -279,116 +320,77 @@ const generateCards = () => {
 //             >
 //               Start Game
 //             </button>
-//             <button className="bg-red-500 text-white px-6 py-2 rounded-lg">
+//             <button className="bg-red-500 text-white px-6 py-2 rounded-lg ">
 //               Leave Room
 //             </button>
 //           </div>
-//         </>
+//         </div>
 //       )}
+//       <AvatarGroup
+//         players={players}
+//         currentPlayerIndex={currentPlayerIndex}
+//         // className="mt-20"
+//       />
 //     </div>
 //   );
 // };
+
 const RoomView = () => {
   const { roomName } = useParams();
+  const [socket] = useState(() => io("http://localhost:3001"));
   const [gameStarted, setGameStarted] = useState(false);
-  const [showLoader, setShowLoader] = useState(false);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const [players, setPlayers] = useState([
-    {
-      id: 1,
-      hand: generateCards(),
-      movedCards: [],
-      avatar: Thanh,
-    }, // Update with actual avatar paths
-    {
-      id: 2,
-      hand: generateCards(),
-      movedCards: [],
-      avatar: Quan,
-    },
-    {
-      id: 3,
-      hand: generateCards(),
-      movedCards: [],
-      avatar: Quang,
-    },
-    {
-      id: 4,
-      hand: generateCards(),
-      movedCards: [],
-      avatar: Duy,
-    },
-  ]);
+  const [hand, setHand] = useState([]);
+  const [players, setPlayers] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [countdown, setCountdown] = useState(15);
+  const [showLoader, setShowLoader] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [gameState, setGameState] = useState(null);
 
-  const handleStartGame = () => {
-    if (players.length < 4) {
-      alert("Not enough players. Need at least 4 players to start the game.");
-      return;
-    }
-    // Show loader for 5 seconds
-    setShowLoader(true);
-    setTimeout(() => {
-      setShowLoader(false);
+  useEffect(() => {
+    socket.emit("join_room", roomName);
+
+    socket.on("game_started", (data) => {
+      setHand(data.hand);
+      setPlayers(data.players);
       setGameStarted(true);
-      setCountdown(15); // Đặt lại đếm ngược khi bắt đầu trò chơi
-    }, 5000); // Hide loader and start game after 5 seconds
+      setShowLoader(false);
+    });
+
+    socket.on("update_game_state", (data) => {
+      setGameState(data.gameState);
+    });
+
+    socket.on("update_players", (players) => {
+      setPlayers(players);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket, roomName]);
+
+  const handleMoveCards = (selectedCards) => {
+    socket.emit("player_move", {
+      roomName,
+      selectedCards,
+    });
   };
-  const handleNextTurn = () => {
-    const totalMovedCards = players.flatMap(
-      (player) => player.movedCards
-    ).length;
 
-    // Nếu số lượng lá bài đã di chuyển vượt quá 13, reset về trạng thái rỗng
-    const newPlayers = players.map((player) => ({
-      ...player,
-      movedCards: totalMovedCards > 7 ? [] : player.movedCards, // Reset nếu vượt quá 13 lá
-    }));
-
-    setPlayers(newPlayers); // Cập nhật trạng thái người chơi
-    setCurrentPlayerIndex((prevIndex) => (prevIndex + 1) % players.length);
-    setCountdown(15); // Đặt lại đếm ngược cho lượt mới
-  };
-  const handleMoveCards = (cards) => {
-    const newPlayers = [...players];
-    const currentPlayer = newPlayers[currentPlayerIndex];
-
-    currentPlayer.hand = currentPlayer.hand.filter(
-      (card) => !cards.includes(card)
-    );
-
-    currentPlayer.movedCards.push(...cards);
-    setPlayers(newPlayers);
-
-    handleNextTurn();
-  };
   const toggleHeader = () => {
-    setIsHeaderVisible((prev) => !prev); // Đảo ngược trạng thái hiển thị của header
+    setIsHeaderVisible((prev) => !prev); // Toggle header visibility
   };
 
   return (
     <div className="flex flex-col items-center h-screen bg-gray-100">
-      {/* <button
-        className="fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg z-10"
-        onClick={toggleHeader}
-      >
-        {isHeaderVisible ? "Hide Header" : "Show Header"}
-      </button> */}
       <div
         className={`fixed rounded-lg z-10 focus:outline-none ${
           isHeaderVisible ? "top-7 right-32" : "top-4 right-4"
-        } `}
+        }`}
       >
         <div className="flex gap-2">
           <img src={menuIcon} alt="" className="w-7 h-7" />
-          <Switch
-            className="h-7"
-            //   className={`fixed rounded-lg z-10 focus:outline-none ${
-            //     isHeaderVisible ? "top-7 right-32" : "top-4 right-4"
-            //   } `}
-            onClick={toggleHeader}
-          />
+          <Switch className="h-7" onClick={toggleHeader} />
         </div>
       </div>
 
@@ -397,7 +399,7 @@ const RoomView = () => {
         <ShuffleCardLoader /> // Show loader when showLoader is true
       ) : gameStarted ? (
         <>
-          {/* Thanh trạng thái hiển thị lượt và đếm ngược */}
+          {/* Status bar for current turn and countdown */}
           <div className="flex items-center justify-between w-3/5 p-4 h-12 shadow-xl bg-gray-200 text-black rounded-lg mt-[5px] border-white border-2">
             <h2 className="text-xl font-semibold">
               Current Turn: Player {currentPlayerIndex + 1}
@@ -445,7 +447,13 @@ const RoomView = () => {
           </p>
           <div className="flex flex-col items-center space-y-4">
             <button
-              onClick={handleStartGame}
+              onClick={() => {
+                setShowLoader(true);
+                setTimeout(() => {
+                  setShowLoader(false);
+                  socket.emit("start_game", roomName); // Emit start game event to server
+                }, 5000); // Show loader for 5 seconds
+              }}
               className="bg-blue-500 text-white px-6 py-2 rounded-lg"
             >
               Start Game
@@ -456,14 +464,11 @@ const RoomView = () => {
           </div>
         </div>
       )}
-      <AvatarGroup
-        players={players}
-        currentPlayerIndex={currentPlayerIndex}
-        // className="mt-20"
-      />
+      <AvatarGroup players={players} currentPlayerIndex={currentPlayerIndex} />
     </div>
   );
 };
+
 const GameBoard = ({ players = [], currentPlayerIndex, onMoveCards }) => {
   const [selectedCards, setSelectedCards] = useState([]);
 
