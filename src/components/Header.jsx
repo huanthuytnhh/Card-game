@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RoomModal from "./RoomModal"; // Import the RoomModal component
 import { Button } from "./ui/button";
+import CreateRoom from "./CreateRoom";
 
 function Header() {
   const { user, isSignedIn } = useUser();
@@ -79,6 +80,7 @@ function Header() {
         onCreateRoom={handleCreateRoom} // Create room handler
         onJoinRoom={handleJoinRoom} // Join room handler
       />
+      {/* <CreateRoom onCreate={handleCreateRoom} /> */}
     </div>
   );
 }

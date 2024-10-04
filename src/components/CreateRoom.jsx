@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "./ui/button"; // Assuming you have a Button component
 import { useNavigate } from "react-router-dom"; // Assuming you're using React Router for navigation
-import ShuffleCardLoader from "./loader/ShuffleCardLoader";
 
 function CreateRoom({ onCreate }) {
   const [roomName, setRoomName] = useState("");
@@ -21,9 +20,13 @@ function CreateRoom({ onCreate }) {
   const handleCreateRoom = () => {
     if (roomName.trim()) {
       const newRoom = { name: roomName, maxPlayers };
-      onCreate(newRoom); // Call onCreate to handle the room creation logic
+
+      // Uncomment this if you need to call onCreate from the parent component
+      if (onCreate) {
+        onCreate(newRoom); // Call onCreate to handle the room creation logic
+      }
+
       setRoomName(""); // Reset form after creation
-      //   <ShuffleCardLoader />;
 
       // Navigate to the newly created room view
       navigate(`/room/${newRoom.name}`);

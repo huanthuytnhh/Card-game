@@ -84,6 +84,9 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage"; // Import your profile page
 import ProtectedRoute from "./routes/ProtectedRoute"; // Import ProtectedRoute
 import UnauthorizedRoute from "./routes/UnauthorizedRoute"; // Import ProtectedRoute
+import JoinRoom from "./components/JoinRoom";
+import CreateRoom from "./components/CreateRoom";
+import RoomView from "./components/RoomView";
 
 const handleCreateRoom = (newRoom) => {
   // You can store the room in a state or context for future use
@@ -105,6 +108,16 @@ const router = createBrowserRouter([
     // Protect this route
     element: <ProtectedRoute component={GameRoom} />,
   },
+  {
+    path: "/joinroom",
+    // Protect this route
+    element: <ProtectedRoute component={JoinRoom} />,
+  },
+  {
+    path: "/createroom",
+    // Protect this route
+    element: <ProtectedRoute component={CreateRoom} />,
+  },
 
   {
     path: "/friends",
@@ -115,6 +128,10 @@ const router = createBrowserRouter([
     path: "/profile",
     // Protect this route
     element: <ProtectedRoute component={ProfilePage} />,
+  },
+  {
+    path: "/room/:roomName", // or "/room/:id" if using room IDs
+    element: <ProtectedRoute component={RoomView} />, // Use RoomView without arguments
   },
 ]);
 
